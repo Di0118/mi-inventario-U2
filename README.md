@@ -1,31 +1,31 @@
-# Tarea-Unidad 2- Programación del lado del servidor
+# Tarea - Unidad 2 - Programación del Lado del Servidor
 
-**Estudiante:** Diana Calderón
-**Carrera:** Ingeniería en Software
-**Nivel**: Cuarto
-**MiInventario**
+**Estudiante:** Diana Calderón  
+**Carrera:** Ingeniería en Software  
+**Nivel:** Cuarto  
+**Proyecto:** MiInventarioExpress (Sistema de Gestión de Amigurumis)
 
-//cambiar
-## Funcionalidades Implementadas
-* **Clonación y configuración del entorno base:** Configuración inicial del repositorio, en el código 1.44
-* **Redefinición del JSON y carga de películas:** Se agregaron 8 películas con sinopsis detalladas, géneros y fechas de estreno 
-* **Lógica Dinámica de Precios :** El sistema calcula automáticamente si es "Estreno" o "Cartelera Regular" comparando fechas.
-* **Spinner de Carga :** Implementación de un cargador visual con un retraso controlado de 5 segundos.
-* **Efectos visuales :** Transiciones suaves con fadeIn para mostrar el catálogo.
-* **Formulario de contacto y validacion:** En la pagina contacto se creo validaciones personalizadas mediante JavaScript. El sistema verifica que el nombre no esté vacío, que el correo sea válido y que el mensaje tenga una extensión obligatoria de entre 20 y 50 caracteres, mostrando mensajes de error dinámicos al usuario.
-* **Se implementó una ventana modal de Bootstrap**  carga dinamicamente el trailer de cada pelicula, sin salir de la pagina principal, optimizando la experiencia del usuario al no recargar la pagina.
-* **Implementacion de una alerta de bienvenida única** me diante localStorage se muestra un mensaje de Binvenida solo la primera vez que se entra a la pagina, evitando que el mensaje se repita siempre en proximas visitas.
-* **Diseño Visual** se personalizo el tema mediante Google Fonts (Poppins), una paleta de colores minimalista y un footer.
-* **Sistema de reseñas y calificaciones**se implementó una seccion de comentarios dinamica que carga datos desde un JSON externo.Incluye un sistema de calificación visual con estrellas del 1 al 5.
+## Funcionalidades Implementadas (Fase 1 y 2)
 
-## Estructura dek Proyecto
-* `index.html`: Página principal con el catálogo dinámico.
-* `js/app.js`: Lógica de carga AJAX y control del spinner.
-* `data/peliculas.json`: Fuente de datos de las películas.
-* `pages/detalle.html`: Visualización detallada de cada película.
+*   **Configuración del Entorno de Servidor:** Creación de un servidor web funcional utilizando **Node.js** y el framework **Express**.
+*   **Arquitectura MVC:** Organización profesional del proyecto mediante el patrón **Modelo-Vista-Controlador**, separando la lógica en carpetas (`models`, `routes`, `views`, `controllers`).
+*   **Persistencia de Datos con MongoDB:** Configuración y conexión del servidor a una base de datos NoSQL mediante **Mongoose**.
+*   **Definición de Esquemas (Models):** Creación del modelo `Producto`, definiendo la estructura para los amigurumis (nombre, precio, descripción e imagen) con validaciones de datos obligatorios.
+*   **Gestión de Archivos Estáticos:** Configuración de carpetas públicas para archivos CSS, imágenes y la carpeta de subidas (`uploads`) para futuras fotos de productos.
+*   **Control de Versiones:** Uso de Git y GitHub con un historial de commits organizado y configuración de `.gitignore` para la seguridad del proyecto.
 
-## Instrucciones de uso
-1. Abrir la carpeta en Visual Studio Code
-2. Ejecutar con la extension  Live Server para visualizar el catálogo de películas.
-3. Esperar los 5 segundos de carga inicial para poder ver la lista de peliculas.
+## Estructura del Proyecto
 
+*   `index.js`: Punto de entrada de la aplicación y configuración del servidor.
+*   `models/Producto.js`: Definición del esquema de datos para MongoDB usando Mongoose.
+*   `routes/`: Carpeta destinada a las rutas del servidor (API/Web).
+*   `views/`: Carpeta para las plantillas dinámicas (Handlebars).
+*   `public/`: Archivos de estilo (CSS) y scripts del lado del cliente.
+*   `.gitignore`: Archivo para excluir carpetas pesadas como `node_modules`.
+
+## Instrucciones de Uso
+
+1.  **Requisitos previos:** Tener instalado **Node.js** y **MongoDB Community Server**.
+2.  **Instalación:** Abrir la terminal en la carpeta del proyecto y ejecutar `npm install` para instalar las dependencias (Express, Mongoose).
+3.  **Ejecución:** Iniciar el servidor con el comando `node index.js`.
+4.  **Verificación:** Abrir el navegador en `http://localhost:3000` para confirmar que el servidor está activo y conectado a la base de datos.
