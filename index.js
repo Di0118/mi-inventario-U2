@@ -2,6 +2,15 @@
 const express = require('express');
 //crear aplicación
 const app = express();
+
+//importar mongoose
+const mongoose = require('mongoose');
+//conexion a mongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
+  .then(()=> console.log('Conectado a MomgoDb con éxito'))
+  .catch((error)=> console.error('Error al conectar a MongoDB:', error));
+  
+
 //definir puerto 3000  estándar en desarrollo
 const PORT = 3000;
 
