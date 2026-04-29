@@ -7,7 +7,7 @@ const app = express();
 const mongoose = require('mongoose');
 //conexion a mongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
-  .then(()=> console.log('Conectado a MomgoDb con éxito'))
+  .then(()=> console.log('Conectado a MongoDB con éxito✅'))
   .catch((error)=> console.error('Error al conectar a MongoDB:', error));
   
 
@@ -19,6 +19,11 @@ const PORT = 3000;
 app.get('/', (req, res) => {
   res.send('MiInventarioExpress funcionando ');
 });
+//para que el servidor entienda la informacion enviada
+app.use(express.json());
+//conectar el archivo de rutas
+app.use('/api/productos', require('./routes/productoRoutes'));
+
 //encender el servidor para q "escuche"
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
