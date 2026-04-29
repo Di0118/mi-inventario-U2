@@ -1,30 +1,36 @@
-//llamar ala libreria Express con require 
+// llamar a la libreria Express
 const express = require('express');
-//crear aplicación
 const app = express();
 
-//importar mongoose
+// importar mongoose
 const mongoose = require('mongoose');
-//conexion a mongoDB
+
+// conexión a mongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
-  .then(()=> console.log('Conectado a MongoDB con éxito✅'))
-  .catch((error)=> console.error('Error al conectar a MongoDB:', error));
-  
+  .then(() => console.log('Conectado a MongoDB con éxito ✅'))
+  .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
-//definir puerto 3000  estándar en desarrollo
-const PORT = 3000;
+// importar motor de plantillas
+const { engine } = require('express-handlebars');
 
-//ruta principal: cuando el usuario entre a la pagina principal"/"
-// req= pedido | res= respuesta
+// configuración de handlebars 
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views'); 
+
+// MIDDLEWARES
+app.use(express.json()); // para que el servidor entienda JSON
+
+// RUTA PRINCIPAL 
 app.get('/', (req, res) => {
-  res.send('MiInventarioExpress funcionando ');
+    res.render('home'); 
 });
-//para que el servidor entienda la informacion enviada
-app.use(express.json());
-//conectar el archivo de rutas
+
+// CONECTAR ARCHIVO DE RUTAS (API)
 app.use('/api/productos', require('./routes/productoRoutes'));
 
-//encender el servidor para q "escuche"
+// ENCENDER EL SERVIDOR
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

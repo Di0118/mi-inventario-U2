@@ -56,5 +56,4 @@ router.post('/', upload.single('imagen'), async (req, res) => {
         res.status(400).json({ mensaje: 'Error al guardar', error });
     }
 });
-
 module.exports = router;
