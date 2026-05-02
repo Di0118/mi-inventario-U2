@@ -1,0 +1,31 @@
+<div class="card shadow"> 
+
+    <div class="card-header bg-dark text-white">
+        <h3 class="mb-0">🧶 Registrar Nuevo Amigurumi</h3>
+
+    </div>
+    <div class="card-body">
+        <!--  enctype para poder subir fotos -->
+        <form action="/api/productos" method="POST" enctype="multipart/form-data">
+           
+            <div class="mb-3">
+                 <!-- campos de texto -->
+                <label class="form-label">Nombre del Amigurumi</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ej: Vaquita" required>
+            </div>
+            <div class="mb-3">
+                 <!--  campo de precio -->
+                <label class="form-label">Precio ($)</label>
+                <input type="number" name="precio" class="form-control" placeholder="0.00" required>
+            </div>
+            <div class="mb-3">
+                <!--  para subir fotos -->
+                <label class="form-label">Foto de tu creación</label>
+                <input type="file" name="imagen" class="form-control" required>
+            </div>
+            <!--  botón -->
+            <button type="submit" class="btn btn-success w-100">✨ Publicar en Inventario</button>
+            <a href="/" class="btn btn-link w-100 mt-2 text-muted">Cancelar</a>
+        </form>
+    </div>
+</div>

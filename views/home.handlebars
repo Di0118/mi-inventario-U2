@@ -1,5 +1,44 @@
-<div class="text-center">
-    <h1>¡Bienvenida a tu Inventario de Amigurumis -ˋˏ✄┈┈┈┈!</h1>
+<div class="container text-center">
+    <h1 class="mt-4">¡Bienvenida a tu Inventario de Amigurumis -ˋˏ✄┈┈┈┈!</h1>
     <p class="lead">Aquí aparecerán tus creaciones muy pronto.</p>
-    <a href="/api/productos" class="btn btn-primary">Ver JSON de productos</a>
+
+    <!-- Botones  -->
+    <div class="d-flex justify-content-center gap-3 mt-4 mb-5">
+        <a href="/nuevo-producto" class="btn btn-success btn-lg shadow">
+            𖹭📌 Nuevo Amigurumi
+        </a>
+        <a href="/api/productos" class="btn btn-primary btn-lg shadow">
+            Ver JSON
+        </a>
+    </div>
+
+    <!-- Contenedor de las Tarjetas -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#each productos}}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="/uploads/{{this.imagen}}" class="card-img-top" alt="{{this.nombre}}" style="height: 250px; object-fit: cover;">
+                
+                <div class="card-body">
+                    <h5 class="card-title text-capitalize">{{this.nombre}}</h5>
+                    <p class="card-text fw-bold text-success">${{this.precio}}</p>
+                    
+                    <!-- Botón Editar -->
+                    <div class="d-grid gap-2 mb-2">
+                        <a href="/editar-producto/{{this._id}}" class="btn btn-outline-primary btn-sm">
+                            Editar Detalles ✏️
+                        </a>
+                    </div>
+                    
+                    <!-- Botón Eliminar -->
+                    <form action="/api/productos/eliminar/{{this._id}}" method="POST" class="d-grid gap-2">
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Borrar?')">
+                            Eliminar ⌫
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </div>

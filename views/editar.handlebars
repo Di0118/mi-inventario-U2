@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <div class="card shadow p-4 mx-auto" style="max-width: 500px;">
+        <h2 class="text-center mb-4">Editar Amigurumi </h2>
+        
+          <form action="/api/productos/editar/{{producto._id}}" method="POST">
+          
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" value="{{producto.nombre}}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Precio</label>
+                <input type="number" name="precio" class="form-control" value="{{producto.precio}}" required>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="/" class="btn btn-light">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

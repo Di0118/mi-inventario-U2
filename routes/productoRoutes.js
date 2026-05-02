@@ -50,10 +50,44 @@ router.post('/', upload.single('imagen'), async (req, res) => {
             descripcion: req.body.descripcion,
             imagen: req.file ? req.file.filename : 'default.jpg' // guarda el nombre del archivo
         });
-        await nuevoProducto.save(); // va ala base de datos
-        res.status(201).json(nuevoProducto);
+        await nuevoProducto.save(); // va ala base de datos 
+      res.redirect('/'); 
     } catch (error) {
         res.status(400).json({ mensaje: 'Error al guardar', error });
     }
 });
+
+//ruta para eliminar
+
+router.post('/eliminar/:id', async (req, res) => {
+    console.log("Se recibió una oredn para eliminar el ID:", req.params.id);
+    try {
+        const id = req.params.id;
+
+        await Producto.findByIdAndDelete(id); 
+        res.redirect('/'); // Esto nos regresa a la vitrina
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+        res.status(500).send("Error interno al intentar eliminar");
+    }
+});
+
+// ruta para editar
+router.post('/editar/:id', async(req, res) => {
+    console.log("Intentando editar ID:", req.params.id);
+    console.log("Datos recibidos:", req.body);
+    
+    try{
+        const id = req.params.id;
+        const nuevosDatos= req.body;
+
+        await Producto.findByIdAndUpdate(id, nuevosDatos);
+
+        res.redirect('/');
+    } catch (error) {
+        console.log("Error al editar:", error);
+        res.status(500).send("No se pudo actualizar los datos");
+    }
+});
+
 module.exports = router;
