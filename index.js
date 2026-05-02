@@ -11,6 +11,11 @@ const bcrypt = require('bcrypt');
 
 const Producto = require('./models/Producto');
 const Usuario = require('./models/Usuario');
+const { body, validationResult }= require('express-validator');
+const http = require('http'); 
+const { Server } = require('socket.io');
+const server = http.createServer(app); //  servidor usando Express
+const io = new Server(server); // conectar Socket.io al servidor
 
 // conexión a mongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
@@ -49,9 +54,16 @@ function asegurarAutenticacion(req, res, next) {
 // RUTA PRINCIPAL 
 app.get('/', asegurarAutenticacion, async (req, res) => {
    try{
+    //buscar
+    const {buscar} = req.query;
+    let filtro= {};
+
+    if (buscar){
+        filtro = { nombre: { $regex: buscar, $options: 'i' } };
+        }
     //1. pedir a mongodb los productos
-    const productos = await Producto.find().lean();
-    res.render('home',{ productos });
+    const productos = await Producto.find(filtro).lean();
+    res.render('home',{ productos, buscar});
      //2. cargar la pagina y enviar la lista de productos
     }catch (error) {
         console.log("Error al buscar productos:", error);
@@ -72,7 +84,20 @@ app.get('/editar-producto/:id', asegurarAutenticacion, async (req, res) => {
         res.redirect('/');
     }
 });
-
+app.post('/editar-producto/:id', asegurarAutenticacion, async (req, res) => {
+    try {
+        const { nombre, precio, stock, descripcion } = req.body;
+        await Producto.findByIdAndUpdate(req.params.id, {
+            nombre,
+            precio,
+            stock: parseInt(stock) || 0,
+            descripcion
+        });
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).send("Error al actualizar");
+    }
+});
 //ruta para Login
 app.get('/login', (req, res) => {
     res.render('login');
@@ -80,7 +105,6 @@ app.get('/login', (req, res) => {
 // procesa login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-   
     const usuarioEncontrado = await Usuario.findOne({ email });
     if (usuarioEncontrado) {
          const coinciden = await bcrypt.compare(password, usuarioEncontrado.password);
@@ -112,15 +136,41 @@ app.get('/registrar-usuario-admin', async (req, res) => {
         res.send("El usuario ya existe o hubo un error.");
     }
 });
-
+app.get('/api/buscar-sugerencias', asegurarAutenticacion, async (req, res) => {
+    try {
+        const { q } = req.query;
+        const sugerencias = await Producto.find({ 
+            nombre: { $regex: q, $options: 'i' } 
+        }).limit(5).select('nombre'); 
+        
+        res.json(sugerencias);
+    } catch (error) {
+        res.status(500).json([]);
+    }
+});
 // CONECTAR ARCHIVO DE RUTAS (API)
 app.use('/api/productos', require('./routes/productoRoutes'));
 
+// Ruta para ver el chat 
+app.get('/chat', asegurarAutenticacion, (req, res) => {
+    res.render('chat');
+});
+// Lógica del Chat
+io.on('connection', (socket) => {
+    console.log('Alguien se conectó al chat');
+
+    // Escucha cuando un usuario envía un mensaje
+    socket.on('enviar-mensaje', (datos) => {
+        // Reenvía el mensaje a TODOS los usuarios conectados
+        io.emit('mensaje-recibido', datos);
+    });
+});
 // ENCENDER EL SERVIDOR
 const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+server.listen(PORT, () => {
+    console.log(`Servidor y Chat corriendo en http://localhost:${PORT}`);
 });
+
 
 
 

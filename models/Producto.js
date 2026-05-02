@@ -9,10 +9,11 @@ const productoSchema = new mongoose.Schema({
 
     descripcion: { type: String },
 
-    imagen: { type: String },// Aquí guardaremos la ruta de la foto
+    imagen: { type: String },
 
     fechaCreacion: {type: Date, default: Date.now},
+
+    stock: { type: Number, default: 0 }
 });
 
-// Exportamos el modelo para usarlo en otros archivos
 module.exports = mongoose.model('Producto', productoSchema);

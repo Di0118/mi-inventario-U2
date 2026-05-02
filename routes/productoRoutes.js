@@ -3,7 +3,7 @@ const router = express.Router();
 const Producto = require('../models/Producto'); // Importamos el molde 
 const multer = require('multer');
 const path = require('path');
-
+const { body, validationResult } = require('express-validator');
 
 // dónde y cómo se guardan los archivos
 const storage = multer.diskStorage({
@@ -42,14 +42,26 @@ router.get('/', async (req, res) => {
 });
 
 // RUTA PARA CREAR UN PRODUCTO (POST)
-router.post('/', upload.single('imagen'), async (req, res) => {
+// ruta para validaciones
+router.post('/', upload.single('imagen'), [
+    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+    body('precio').isNumeric().withMessage('El precio debe ser un número'),
+    body('stock').isInt(),
+], async (req, res) => {
+    const errores= validationResult(req);
+    if (!errores.isEmpty()) {
+        return res.status(400).json({ errores: errores.array() });
+    }
+
     try {
         const nuevoProducto = new Producto({
             nombre: req.body.nombre,
             precio: req.body.precio,
+            stock: req.body.stock,
             descripcion: req.body.descripcion,
             imagen: req.file ? req.file.filename : 'default.jpg' // guarda el nombre del archivo
         });
+
         await nuevoProducto.save(); // va ala base de datos 
       res.redirect('/'); 
     } catch (error) {

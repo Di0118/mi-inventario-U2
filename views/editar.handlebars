@@ -12,6 +12,15 @@
                 <label class="form-label">Precio</label>
                 <input type="number" name="precio" class="form-control" value="{{producto.precio}}" required>
             </div>
+
+            <div class="mb-3">
+    <label class="form-label fw-bold">Cantidad en Stock:</label>
+    <input type="number" 
+           name="stock" 
+           class="form-control" 
+           value="{{producto.stock}}" 
+           min="0">
+</div>
             
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>

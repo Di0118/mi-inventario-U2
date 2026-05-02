@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h3>Chat de Inventario </h3>
+        </div>
+        <div class="card-body" id="caja-chat" style="height: 400px; overflow-y: auto;">
+          
+        </div>
+        <div class="card-footer">
+            <form id="formulario-chat">
+                <div class="input-group">
+                    <input type="text" id="mensaje" class="form-control" placeholder="Escribe un mensaje..." required>
+                    <button type="submit" class="btn btn-info">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const form = document.getElementById('formulario-chat');
+    const input = document.getElementById('mensaje');
+    const cajaChat = document.getElementById('caja-chat');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        socket.emit('enviar-mensaje', input.value); 
+        input.value = '';
+    });
+
+    socket.on('mensaje-recibido', (msg) => {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>Admin:</strong> ${msg}`;
+        cajaChat.appendChild(p);
+        cajaChat.scrollTop = cajaChat.scrollHeight; 
+    });
+</script>
