@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Producto = require('../models/Producto'); // Importamos el molde 
+const Categoria= require('../models/Categoria');
 const multer = require('multer');
 const path = require('path');
 const { body, validationResult } = require('express-validator');
@@ -31,22 +32,33 @@ const upload = multer({
 });
 
 
-// RUTA PARA OBTENER TODOS LOS PRODUCTOS (GET)
-router.get('/', async (req, res) => {
+// 1. OBTENER TODOS LOS PRODUCTOS (GET /api/products)
+router.get('/products', async (req, res) => {
     try {
-        const productos = await Producto.find(); // busca en la base de datos
+        const productos = await Producto.find().populate('categoriaId'); // busca en la base de datos
         res.json(productos);
     } catch (error) {
-        res.status(500).json({ mensaje: 'Error al obtener productos' });
+        res.status(500).json({ mensaje: 'Error al obtener productos', error });
     }
 });
 
-// RUTA PARA CREAR UN PRODUCTO (POST)
-// ruta para validaciones
-router.post('/', upload.single('imagen'), [
+// 2. OBTENER UN PRODUCTO POR ID (GET /api/products/:id)
+router.get('/products/:id', async (req, res) => {
+    try {
+        const producto = await Producto.findById(req.params.id).populate('categoriaId');
+        if (!producto) return res.status(404).json({mensaje:'Producto no encontrado'});
+        res.json(producto);
+    } catch (error){
+        res.status(500).json({ mensaje:'Error en el servidor'});
+    }
+});
+
+// 3. CREAR PRODUCTO (POST /api/products)
+router.post('/products', upload.single('imagen'), [
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('precio').isNumeric().withMessage('El precio debe ser un número'),
-    body('stock').isInt(),
+    body('stock').isInt({ min: 0 }).withMessage('El stock no puede ser negativo'),
+    body('categoriaId').notEmpty().withMessage('La categoría es obligatoria')
 ], async (req, res) => {
     const errores= validationResult(req);
     if (!errores.isEmpty()) {
@@ -63,43 +75,44 @@ router.post('/', upload.single('imagen'), [
         });
 
         await nuevoProducto.save(); // va ala base de datos 
-      res.redirect('/'); 
+      res.status(201).json(nuevoProducto); // responder con el objeto creado
     } catch (error) {
-        res.status(400).json({ mensaje: 'Error al guardar', error });
+        res.status(400).json({ mensaje: 'Error al guardar', error: error.message });
     }
 });
 
-//ruta para eliminar
-
-router.post('/eliminar/:id', async (req, res) => {
-    console.log("Se recibió una oredn para eliminar el ID:", req.params.id);
+// 4. EDITAR PRODUCTO (PUT /api/products/:id) 
+router.put('/products/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-
-        await Producto.findByIdAndDelete(id); 
-        res.redirect('/'); // Esto nos regresa a la vitrina
+        const actualizado = await Producto.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!actualizado) return res.status(404).json({ mensaje: 'No encontrado' });
+        res.json(actualizado);
     } catch (error) {
-        console.error("Error al eliminar:", error);
-        res.status(500).send("Error interno al intentar eliminar");
+        res.status(400).json({ mensaje: 'Error al editar', error: error.message });
     }
 });
 
-// ruta para editar
-router.post('/editar/:id', async(req, res) => {
-    console.log("Intentando editar ID:", req.params.id);
-    console.log("Datos recibidos:", req.body);
-    
-    try{
-        const id = req.params.id;
-        const nuevosDatos= req.body;
+// 5. ELIMINAR PRODUCTO (DELETE /api/products/:id)
 
-        await Producto.findByIdAndUpdate(id, nuevosDatos);
-
-        res.redirect('/');
+router.delete('/products/:id', async (req, res) => {
+    try {
+        const eliminado = await Producto.findByIdAndDelete(req.params.id);
+        if (!eliminado) return res.status(404).json({ mensaje: 'No encontrado' });
+        res.json({ mensaje: 'Eliminado correctamente' });
     } catch (error) {
-        console.log("Error al editar:", error);
-        res.status(500).send("No se pudo actualizar los datos");
+        res.status(500).json({ mensaje: 'Error al eliminar' });
     }
 });
+
+// 6. OBTENER CATEGORÍAS (GET /api/categories) 
+router.get('/categories', async (req, res) => {
+    try {
+        const categorias = await Categoria.find();
+        res.json(categorias);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener categorías' });
+    }
+});
+
 
 module.exports = router;
