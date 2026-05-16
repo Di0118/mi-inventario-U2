@@ -33,7 +33,7 @@ const upload = multer({
 
 
 // 1. OBTENER TODOS LOS PRODUCTOS (GET /api/products)
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const productos = await Producto.find().populate('categoriaId'); // busca en la base de datos
         res.json(productos);
@@ -43,7 +43,7 @@ router.get('/products', async (req, res) => {
 });
 
 // 2. OBTENER UN PRODUCTO POR ID (GET /api/products/:id)
-router.get('/products/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const producto = await Producto.findById(req.params.id).populate('categoriaId');
         if (!producto) return res.status(404).json({mensaje:'Producto no encontrado'});
@@ -54,7 +54,7 @@ router.get('/products/:id', async (req, res) => {
 });
 
 // 3. CREAR PRODUCTO (POST /api/products)
-router.post('/products', upload.single('imagen'), [
+router.post('/', upload.single('imagen'), [
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('precio').isNumeric().withMessage('El precio debe ser un número'),
     body('stock').isInt({ min: 0 }).withMessage('El stock no puede ser negativo'),
@@ -71,7 +71,7 @@ router.post('/products', upload.single('imagen'), [
             precio: req.body.precio,
             stock: req.body.stock,
             descripcion: req.body.descripcion,
-            imagen: req.file ? req.file.filename : 'default.jpg' // guarda el nombre del archivo
+            imagenUrl: req.file ? req.file.filename : 'default.jpg' // guarda el nombre del archivo
         });
 
         await nuevoProducto.save(); // va ala base de datos 
@@ -82,7 +82,7 @@ router.post('/products', upload.single('imagen'), [
 });
 
 // 4. EDITAR PRODUCTO (PUT /api/products/:id) 
-router.put('/products/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const actualizado = await Producto.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!actualizado) return res.status(404).json({ mensaje: 'No encontrado' });
@@ -94,7 +94,7 @@ router.put('/products/:id', async (req, res) => {
 
 // 5. ELIMINAR PRODUCTO (DELETE /api/products/:id)
 
-router.delete('/products/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const eliminado = await Producto.findByIdAndDelete(req.params.id);
         if (!eliminado) return res.status(404).json({ mensaje: 'No encontrado' });

@@ -17,6 +17,17 @@ const { Server } = require('socket.io');
 const server = http.createServer(app); //  servidor usando Express
 const io = new Server(server); // conectar Socket.io al servidor
 
+const categoriaRoutes = require('./routes/categoriaRoutes');
+const productoRoutes = require('./routes/productoRoutes');
+
+const cors = require('cors');
+
+app.use(cors()); 
+app.use('/uploads', express.static('uploads'));
+app.use(express.json());
+app.use('/api/productos', productoRoutes);
+app.use('/api/categorias', categoriaRoutes);
+
 // conexión a mongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
   .then(() => console.log('Conectado a MongoDB con éxito ✅'))
@@ -170,10 +181,3 @@ const PORT = 3000;
 server.listen(PORT, () => {
     console.log(`Servidor y Chat corriendo en http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-

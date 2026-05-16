@@ -30,9 +30,9 @@ const sembrarDatos = async () => {
             { nombre: 'Tulipan en Maceta', precio: 25, stock: 2, descripcion: 'Tulipan tejido ideal para decorar tu escritorio', imagenUrl: '/uploads/tulipan.jpg', categoriaId: cats[2]._id },
             { nombre: 'Llavero Snoopy', precio: 4, stock: 15, descripcion: 'Mini snoopy fresa', imagenUrl: '/uploads/snoopy.jpeg', categoriaId: cats[0]._id },
             { nombre: 'Peluche Capibara', precio: 20, stock: 4, descripcion: 'Suave capibara', imagenUrl: '/uploads/peluche.jpeg', categoriaId: cats[1]._id },
-            { nombre: 'Caperucita', precio: 12, stock: 6, descripcion: 'Hermosa muñeca de caperucita', imagenUrl: '/uploads/caperucita.jpeg', categoriaId: cats[2]._id },
+            { nombre: 'Caperucita', precio: 12, stock: 6, descripcion: 'Hermosa muñeca de caperucita', imagenUrl: '/uploads/caperucita.jpeg', categoriaId: cats[3]._id },
             { nombre: 'Futbolista Personalizado', precio: 30, stock: 1, descripcion: 'Futbolista basado en fotos del cliente', imagenUrl: '/uploads/personalizado.jpeg', categoriaId: cats[3]._id },
-            { nombre: 'Rosario personalizado', precio: 15, stock: 20, descripcion: 'Hermoso rosario color turquesa', imagenUrl: '/uploads/rosario.jpeg', categoriaId: cats[0]._id },
+            { nombre: 'Rosario personalizado', precio: 15, stock: 20, descripcion: 'Hermoso rosario color turquesa', imagenUrl: '/uploads/rosario.jpeg', categoriaId: cats[3]._id },
             { nombre: 'Gatitos', precio: 11, stock: 7, descripcion: 'Gatos para compartir', imagenUrl: '/uploads/gato.jpeg', categoriaId: cats[1]._id }
         ];
         await Producto.insertMany(productos);

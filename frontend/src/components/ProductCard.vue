@@ -1,0 +1,74 @@
+
+<template>
+  <div class="tarjeta">
+    <img :src="'http://localhost:3000' + product.imagenUrl" :alt="product.nombre">
+
+    <router-link :to="'/product/' + product._id" class="link-detalle">
+        <h3>{{ product.nombre }}</h3>
+    </router-link>
+
+    <p>{{ product.descripcion }}</p>
+    <span class="precio">${{ product.precio }}</span>
+    
+    <button @click="avisarCarrito">Añadir al carrito</button>
+  </div>
+</template>
+
+<script setup>
+
+const props = defineProps({
+  product: Object // Le decimos que recibirá un objeto (un amigurumi)
+});
+
+
+const emit = defineEmits(['added-to-cart']);
+
+const avisarCarrito = () => {
+ 
+  emit('added-to-cart', props.product);
+  alert('¡Añadido al carrito: ' + props.product.nombre + '!');
+};
+</script>
+
+<style scoped>
+.tarjeta {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 250px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.tarjeta img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.precio {
+  display: block;
+  font-weight: bold;
+  color: #dcb2e9;
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+button {
+  background-color: #dcb2e9;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.link-detalle {
+  text-decoration: none; 
+  color: #333;           
+  transition: color 0.3s;
+}
+
+.link-detalle:hover {
+  color: #dcb2e9;        
+}
+</style>
