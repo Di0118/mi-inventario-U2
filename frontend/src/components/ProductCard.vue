@@ -1,7 +1,7 @@
 
 <template>
   <div class="tarjeta">
-    <img :src="'http://localhost:3000' + product.imagenUrl" :alt="product.nombre">
+    <img :src="product.imagenUrl" :alt="product.nombre">
 
     <router-link :to="'/product/' + product._id" class="link-detalle">
         <h3>{{ product.nombre }}</h3>
@@ -11,6 +11,10 @@
     <span class="precio">${{ product.precio }}</span>
     
     <button @click="avisarCarrito">Añadir al carrito</button>
+    <button @click="$emit('editar-producto', product)" class="btn-editar">
+   Editar
+</button>
+
   </div>
 </template>
 

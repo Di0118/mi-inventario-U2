@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Categoria = require('../models/Categoria'); // Revisa que la ruta a tu modelo sea correcta
+const Categoria = require('../models/Categoria'); 
 
 // Ruta para obtener todas las categorías
 router.get('/', async (req, res) => {
@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         const categorias = await Categoria.find();
         res.json(categorias);
     } catch (error) {
-        res.status(500).json({ mensaje: 'Error al obtener las categorías', error });
+        res.status(500).json({ mensaje: 'Error al obtener categorías', error: error.message });
     }
 });
 

@@ -1,42 +1,58 @@
 <template>
-  <div v-if="producto" class="detalle-contenedor">
-    <img :src="'http://localhost:3000' + producto.imagenUrl" :alt="producto.nombre">
+  <div v-if="loading" class="cargando">
+    <p> Buscando los detalles del producto... </p>
+    </div>
+
+     <div v-else-if="error" class="error-contenedor">
+    <p>Hubo un incoveniente al cargar el producto: {{ error }}</p>
+    <button class="btn-volver" @click="$router.push('/')">Regresar al catálogo</button>
+  </div>
+  <div v-else-if="producto" class="detalle-contenedor">
+    <img :src="producto.imagenUrl" :alt="producto.nombre">
     
     <div class="info">
-      <h1>{{producto.nombre }}</h1>
+      <h1>{{ producto.nombre }}</h1>
       <p class="descripcion-larga">{{ producto.descripcion }}</p>
+      
       <div class="detalles-tecnicos">
-        <p><strong>Stock disponible:</strong> {{ producto.stock }} unidades</p>
+        <p><strong>Disponibilidad:</strong> {{ producto.stock }} unidades tejidas</p>
         <span class="precio-grande">${{ producto.precio }}</span>
       </div>
-      <button class="btn-volver" @click="$router.push('/')">Volver al catálogo</button>
+
+      <div class="bloque-botones">
+        <button class="btn-agregar" @click="agregarAlCarrito(producto)">
+          Añadir al carrito 
+        </button>
+        <button class="btn-volver" @click="$router.push('/')">
+          Volver al catálogo
+        </button>
+      </div>
     </div>
-  </div>
-  
-  <div v-else class="cargando">
-    <p>Buscando los detalles del amigurumi... </p>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router'; 
-import axios from 'axios';
+
+import { useProducts } from '@/composables/useProducts';
+import { useCart } from '@/composables/useCart';
 
 const route = useRoute(); 
 const producto = ref(null);
 
-const cargarDetalle = async () => {
-  try {
+const { fetchOneProduct, products, loading, error } = useProducts();
+const { agregarAlCarrito } = useCart();
+
+const cargarDatos = async () => {
     const id = route.params.id;
-    const respuesta = await axios.get(`http://localhost:3000/api/productos/${id}`);
-    producto.value = respuesta.data;
-  } catch (error) {
-    console.error("No pudimos traer el detalle:", error);
+    await fetchOneProduct(id);
+    if (products.value) {
+    producto.value = products.value;
   }
 };
 
-onMounted(cargarDetalle);
+onMounted(cargarDatos);
 </script>
 
 <style scoped>
@@ -44,16 +60,16 @@ onMounted(cargarDetalle);
   display: flex;
   gap: 50px;
   padding: 40px;
-  max-width: 1000px;
-  margin: 50px auto;
+  max-width: 900px;
+  margin: 30px auto;
   background: white;
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.05);
 }
 
 img {
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   object-fit: cover;
   border-radius: 15px;
 }
@@ -74,20 +90,53 @@ h1 { color: #5a3e62; margin-bottom: 20px; }
   margin-bottom: 20px;
 }
 
+.detalles-tecnicos {
+  margin-bottom: 20px;
+}
+
 .precio-grande {
   display: block;
-  font-size: 2.5rem;
-  color: #dcb2e9;
+  font-size: 2.3rem;
+  color: #a46bb5;
   font-weight: bold;
   margin-top: 10px;
 }
 
-.btn-volver {
-  margin-top: 30px;
-  background-color: #f3e5f5;
-  border: 1px solid #dcb2e9;
-  padding: 10px 20px;
-  border-radius: 10px;
+.bloque-botones {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-agregar {
+  background-color: #dcb2e9;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 20px;
+  font-weight: bold;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-agregar:hover {
+  background-color: #bfa0cc;
+}
+
+.btn-volver {
+  background-color: #fdf5f5;
+  border: 1px solid #dcb2e9;
+  color: #5d4037;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cargando, .error-contenedor {
+  padding: 60px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #7b4f8a;
 }
 </style>

@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 
 const Producto = require('./models/Producto');
 const Usuario = require('./models/Usuario');
-const { body, validationResult }= require('express-validator');
+const { body, validationResult } = require('express-validator');
 const http = require('http'); 
 const { Server } = require('socket.io');
-const server = http.createServer(app); //  servidor usando Express
+const server = http.createServer(app); // servidor usando Express
 const io = new Server(server); // conectar Socket.io al servidor
 
 const categoriaRoutes = require('./routes/categoriaRoutes');
@@ -23,10 +23,19 @@ const productoRoutes = require('./routes/productoRoutes');
 const cors = require('cors');
 
 app.use(cors()); 
-app.use('/uploads', express.static('uploads'));
-app.use(express.json());
-app.use('/api/productos', productoRoutes);
-app.use('/api/categorias', categoriaRoutes);
+app.use(express.json()); // para que el servidor entienda JSON
+app.use(express.urlencoded({ extended: true })); // para entender datos de formularios
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // permite ver las fotos de la carpeta uploads
+
+app.use(session({
+    secret: 'miClave',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// ENRUTAMIENTO DE LA API REST ---
+app.use('/api/products', productoRoutes);     // Cumple con GET/POST/PUT/DELETE /api/products
+app.use('/api/categories', categoriaRoutes);   // Cumple con GET /api/categories
 
 // conexión a mongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
@@ -37,24 +46,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
 app.engine('handlebars', engine({
     extname: '.handlebars',
     defaultLayout: 'main', 
-    layoutsDir: path.join(__dirname, 'views/layouts') //layouts
+    layoutsDir: path.join(__dirname, 'views/layouts') 
 }));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views')); 
 
-// MIDDLEWARES
-app.use(express.json()); // para que el servidor entienda JSON
-//para entender datos de formularios
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: 'miClave',
-    resave: false,
-    saveUninitialized: false
-}));
-//  permite que el navegador pueda ver las fotos de la carpeta uploads
-app.use('/uploads', express.static('uploads'));
-
-//guadia de seguridad
+// Guardia de seguridad
 function asegurarAutenticacion(req, res, next) {
     if (req.session.usuarioId) {
         return next(); 
@@ -64,25 +61,22 @@ function asegurarAutenticacion(req, res, next) {
 
 // RUTA PRINCIPAL 
 app.get('/', asegurarAutenticacion, async (req, res) => {
-   try{
-    //buscar
-    const {buscar} = req.query;
-    let filtro= {};
+   try {
+        const { buscar } = req.query;
+        let filtro = {};
 
-    if (buscar){
-        filtro = { nombre: { $regex: buscar, $options: 'i' } };
+        if (buscar) {
+            filtro = { nombre: { $regex: buscar, $options: 'i' } };
         }
-    //1. pedir a mongodb los productos
-    const productos = await Producto.find(filtro).lean();
-    res.render('home',{ productos, buscar});
-     //2. cargar la pagina y enviar la lista de productos
-    }catch (error) {
+        const productos = await Producto.find(filtro).lean();
+        res.render('home', { productos, buscar });
+    } catch (error) {
         console.log("Error al buscar productos:", error);
         res.status(500).send("Error en el servidor");
     }
-   });
+});
 
-//ruta para mostrar el formulario de agregar un producto
+//   mostrar el formulario de agregar un producto
 app.get('/nuevo-producto', asegurarAutenticacion, (req, res) => {
     res.render('nuevo'); 
 });
@@ -95,25 +89,33 @@ app.get('/editar-producto/:id', asegurarAutenticacion, async (req, res) => {
         res.redirect('/');
     }
 });
+
 app.post('/editar-producto/:id', asegurarAutenticacion, async (req, res) => {
     try {
-        const { nombre, precio, stock, descripcion } = req.body;
+        const { nombre, precio, descripcion, categoriaId, stock, imagenUrl } = req.body;
+        
         await Producto.findByIdAndUpdate(req.params.id, {
             nombre,
-            precio,
+            precio: parseFloat(precio) || 0,
             stock: parseInt(stock) || 0,
-            descripcion
+            descripcion,
+            imagenUrl,
+            categoriaId
         });
+        
         res.redirect('/');
     } catch (error) {
+        console.error("Error al actualizar producto:", error);
         res.status(500).send("Error al actualizar");
     }
 });
-//ruta para Login
+
+// Ruta para Login
 app.get('/login', (req, res) => {
     res.render('login');
 });
-// procesa login
+
+// Procesar login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const usuarioEncontrado = await Usuario.findOne({ email });
@@ -124,7 +126,7 @@ app.post('/login', async (req, res) => {
             req.session.usuarioId = usuarioEncontrado._id;
             return res.redirect('/'); 
          }
-        }
+    }
     res.send('Email o contraseña incorrectos. <a href="/login">Intentar de nuevo</a>');
 });
 
@@ -147,6 +149,7 @@ app.get('/registrar-usuario-admin', async (req, res) => {
         res.send("El usuario ya existe o hubo un error.");
     }
 });
+
 app.get('/api/buscar-sugerencias', asegurarAutenticacion, async (req, res) => {
     try {
         const { q } = req.query;
@@ -159,23 +162,20 @@ app.get('/api/buscar-sugerencias', asegurarAutenticacion, async (req, res) => {
         res.status(500).json([]);
     }
 });
-// CONECTAR ARCHIVO DE RUTAS (API)
-app.use('/api/productos', require('./routes/productoRoutes'));
 
 // Ruta para ver el chat 
 app.get('/chat', asegurarAutenticacion, (req, res) => {
     res.render('chat');
 });
+
 // Lógica del Chat
 io.on('connection', (socket) => {
     console.log('Alguien se conectó al chat');
-
-    // Escucha cuando un usuario envía un mensaje
     socket.on('enviar-mensaje', (datos) => {
-        // Reenvía el mensaje a TODOS los usuarios conectados
         io.emit('mensaje-recibido', datos);
     });
 });
+
 // ENCENDER EL SERVIDOR
 const PORT = 3000;
 server.listen(PORT, () => {

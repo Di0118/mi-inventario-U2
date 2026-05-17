@@ -2,34 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Producto = require('../models/Producto'); // Importamos el molde 
 const Categoria= require('../models/Categoria');
-const multer = require('multer');
-const path = require('path');
 const { body, validationResult } = require('express-validator');
-
-// dónde y cómo se guardan los archivos
-const storage = multer.diskStorage({
-    destination: (req, file, cb)=> {
-        cb(null, 'uploads'); // se guardan en la carpeta uploads
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nombre único para que no se repitan
-    },
-});
-// Validación: Solo imágenes y máximo 2MB 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 2000000 }, // 2MB máximo
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif/;
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-        cb(new Error("Error: Solo se permiten imágenes (jpeg, jpg, png, gif)"));
-    }
-});
 
 
 // 1. OBTENER TODOS LOS PRODUCTOS (GET /api/products)
@@ -46,37 +19,40 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const producto = await Producto.findById(req.params.id).populate('categoriaId');
-        if (!producto) return res.status(404).json({mensaje:'Producto no encontrado'});
+        if (!producto) return res.status(404).json({ mensaje: 'Producto no encontrado' });
         res.json(producto);
-    } catch (error){
-        res.status(500).json({ mensaje:'Error en el servidor'});
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error en el servidor' });
     }
 });
-
 // 3. CREAR PRODUCTO (POST /api/products)
-router.post('/', upload.single('imagen'), [
+router.post('/', [
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('precio').isNumeric().withMessage('El precio debe ser un número'),
     body('stock').isInt({ min: 0 }).withMessage('El stock no puede ser negativo'),
-    body('categoriaId').notEmpty().withMessage('La categoría es obligatoria')
+    body('categoriaId').notEmpty().withMessage('La categoría es obligatoria'),
+   
+    body('imagenUrl').notEmpty().withMessage('Debe proporcionar una URL de imagen')
 ], async (req, res) => {
-    const errores= validationResult(req);
+    const errores = validationResult(req);
     if (!errores.isEmpty()) {
         return res.status(400).json({ errores: errores.array() });
     }
 
     try {
-        const nuevoProducto = new Producto({
+         const nuevoProducto = new Producto({
             nombre: req.body.nombre,
             precio: req.body.precio,
             stock: req.body.stock,
             descripcion: req.body.descripcion,
-            imagenUrl: req.file ? req.file.filename : 'default.jpg' // guarda el nombre del archivo
+            imagenUrl: req.body.imagenUrl,
+            categoriaId: req.body.categoriaId 
         });
 
-        await nuevoProducto.save(); // va ala base de datos 
-      res.status(201).json(nuevoProducto); // responder con el objeto creado
+        await nuevoProducto.save(); 
+        res.status(201).json(nuevoProducto); 
     } catch (error) {
+        console.error("Error al guardar producto mediante la API:", error);
         res.status(400).json({ mensaje: 'Error al guardar', error: error.message });
     }
 });
@@ -93,7 +69,6 @@ router.put('/:id', async (req, res) => {
 });
 
 // 5. ELIMINAR PRODUCTO (DELETE /api/products/:id)
-
 router.delete('/:id', async (req, res) => {
     try {
         const eliminado = await Producto.findByIdAndDelete(req.params.id);
@@ -104,15 +79,5 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// 6. OBTENER CATEGORÍAS (GET /api/categories) 
-router.get('/categories', async (req, res) => {
-    try {
-        const categorias = await Categoria.find();
-        res.json(categorias);
-    } catch (error) {
-        res.status(500).json({ mensaje: 'Error al obtener categorías' });
-    }
-});
-
-
 module.exports = router;
+

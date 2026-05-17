@@ -3,6 +3,10 @@
     <h2> Nuestro Catálogo 🗒ˎˊ˗ </h2>
     <p> Aquí verás mis creaciones ¡Bienvenida al catálogo de crochet!</p>
 
+  <button @click="abrirCrearModal" class="btn-nuevo-producto">
+      Agregar nuevo producto
+    </button>
+    
     <div class="filtros">
       <input
         v-model="busqueda"
@@ -30,8 +34,17 @@
     :key="amigurumi._id" 
     :product="amigurumi"
     @added-to-cart="gestionarCarrito"
+    @editar-producto="abrirEditarModal" 
   />
 </div>
+
+<ProductModal 
+      :is-open="isModalOpen" 
+      :categories="categories"
+      :producto-datos="productoAEditar" 
+      @close="isModalOpen = false"
+      @producto-guardado="fetchAllProducts" 
+    />
 </div>
 </template>
 
@@ -39,17 +52,33 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import ProductCard from '../components/ProductCard.vue';
+import ProductModal from '../components/ProductModal.vue';
 import { useProducts } from '../composables/useProducts';
+import { useCart } from '../composables/useCart'; 
 
 const { products, categories, loading, error, fetchAllProducts, fetchCategories } = useProducts();
+const { agregarAlCarrito } = useCart();
+
 const busqueda = ref('');
 const categoriaSeleccionada = ref('');
+const isModalOpen = ref(false);
 
-const gestionarCarrito= (producto) => {
-console.log("Evento recibido para:", producto.nombre);
+const productoAEditar = ref(null); 
+
+const abrirEditarModal = (producto) => {
+  productoAEditar.value = producto;
+  isModalOpen.value = true;
+};
+const abrirCrearModal = () => {
+  productoAEditar.value = null; 
+  isModalOpen.value = true;
 };
 
-// 1. Obtener productos del Backend
+const gestionarCarrito = (producto) => {
+  agregarAlCarrito(producto);
+};
+
+
 const listaFiltrada = computed(() => {
   if (!products.value) return [];
 
@@ -68,6 +97,7 @@ onMounted(async () => {
   await fetchAllProducts();
   await fetchCategories();
 });
+
 </script>
 
 <style scoped>
@@ -117,5 +147,19 @@ input {
   border-radius: 20px;
   border: 1px solid #dcb2e9;
   margin-bottom: 20px;
+}
+.btn-nuevo-producto {
+  background-color: #a46bb5; /* El moradito de tu diseño */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  
+}
+
+.btn-nuevo-producto:hover {
+  background-color: #8e599e; /* Se oscurece un poquito al pasar el mouse */
 }
 </style>

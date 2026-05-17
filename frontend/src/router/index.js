@@ -8,6 +8,12 @@ const routes = [
     name: 'product-detail', 
     component: () => import('@/views/ProductDetailView.vue') 
   },
+  //lazy loading
+  { 
+    path: '/cart', 
+    name: 'cart', 
+    component: () => import('@/views/CartView.vue') 
+  },
   { 
     path: '/about', 
     name: 'about', 

@@ -1,5 +1,6 @@
 import { useApi } from './useApi';
 import {ref} from 'vue'; //para categorias
+import axios from 'axios';
 
 export function useProducts() {
 
@@ -13,17 +14,19 @@ export function useProducts() {
     const categories = ref([]);
 
     const fetchAllProducts = async () => {
-        await apiProductos.request('http://localhost:3000/api/productos');
+        await apiProductos.request('http://localhost:3000/api/products');
     };
 
     const fetchOneProduct = async (id) => {
-        await apiProductos.request(`http://localhost:3000/api/productos/${id}`);
+        await apiProductos.request(`http://localhost:3000/api/products/${id}`);
     };
 
     const fetchCategories = async () => {
-        await apiCategorias.request('http://localhost:3000/api/categorias'); // <--- Cambiado a categorias
-        if (apiCategorias.data.value) {
-            categories.value = apiCategorias.data.value;
+        try {
+            const res = await axios.get('http://localhost:3000/api/categories');
+            categories.value = res.data; 
+        } catch (err) {
+            console.error("Error al cargar categorías mediante Axios:", err);
         }
     };
 
