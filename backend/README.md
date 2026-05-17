@@ -32,7 +32,15 @@
 
 ## Instrucciones de Uso
 
-1.  **Requisitos previos:** Tener instalado **Node.js** y **MongoDB Community Server**.
-2.  **Instalación:** Abrir la terminal en la carpeta del proyecto y ejecutar `npm install` para instalar las dependencias (Express, Mongoose).
-3.  **Ejecución:** Iniciar el servidor con el comando `node index.js`.
-4.  **Verificación:** Abrir el navegador en `http://localhost:3000` para confirmar que el servidor está activo y conectado a la base de datos.
+1. **Requisitos previos:** Tener instalado **Node.js** y **MongoDB Community Server**.
+2. **Configuración del Servidor (Backend):**
+   * Abrir la terminal en la carpeta `backend` ( cd backend)
+   * Ejecutar `npm install` para instalar las dependencias (Express, Mongoose).
+   * Iniciar el servidor con el comando npm start
+   * Verificación: Abrir `http://localhost:3000/api/products` para confirmar que responde.
+
+3. **Configuración de la Interfaz (Frontend):**
+   * Abrir una nueva terminal en la carpeta `frontend` (cd frontend)
+   * Ejecutar `npm install` para instalar las dependencias de Vue y Vite.
+   * Iniciar la aplicación con el comando `npm run dev`.
+   * Verificación: Abrir el navegador en la URL que te dé la consola.
