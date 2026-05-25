@@ -1,3 +1,4 @@
+require ('dotenv').config(); //lee el archivo .env
 // llamar a la libreria Express
 const express = require('express');
 const app = express();
@@ -21,6 +22,7 @@ const categoriaRoutes = require('./routes/categoriaRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 
 const cors = require('cors');
+const { timeStamp } = require('console');
 
 app.use(cors()); 
 app.use(express.json()); // para que el servidor entienda JSON
@@ -32,14 +34,23 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+// endpoint health
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'UP',
+        timeStamp: new Date(),
+        message: 'El servidor MercApp esta respondiendo con éxito'
+    });
+});
+
 
 // ENRUTAMIENTO DE LA API REST ---
-app.use('/api/products', productoRoutes);     // Cumple con GET/POST/PUT/DELETE /api/products
-app.use('/api/categories', categoriaRoutes);   // Cumple con GET /api/categories
+app.use('/api/products', productoRoutes);     //  GET/POST/PUT/DELETE /api/products
+app.use('/api/categories', categoriaRoutes);   //  GET /api/categories
 
 // conexión a mongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/mi_inventario')
-  .then(() => console.log('Conectado a MongoDB con éxito ✅'))
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Conectado a MongoDB Atlas con éxito '))
   .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
 // configuración de handlebars 
@@ -176,8 +187,10 @@ io.on('connection', (socket) => {
     });
 });
 
+
 // ENCENDER EL SERVIDOR
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 server.listen(PORT, () => {
-    console.log(`Servidor y Chat corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en ${PORT}`);
 });
