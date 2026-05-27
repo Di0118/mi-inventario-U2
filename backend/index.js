@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt');
 
 const Producto = require('./models/Producto');
 const Usuario = require('./models/Usuario');
+const Categoria = require('./models/Categoria');
 const { body, validationResult } = require('express-validator');
 const http = require('http'); 
 const { Server } = require('socket.io');
@@ -21,7 +22,7 @@ const io = new Server(server); // conectar Socket.io al servidor
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 
-const cors = require('cors');
+const cors  = require('cors');
 const { timeStamp } = require('console');
 
 app.use(cors()); 
