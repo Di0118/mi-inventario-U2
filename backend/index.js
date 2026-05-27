@@ -35,6 +35,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+// conexión a mongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Conectado a MongoDB Atlas con éxito '))
+  .catch((error) => console.error('Error al conectar a MongoDB:', error));
+
 // endpoint health
 app.get('/health', (req, res) => {
     res.status(200).json({
@@ -49,10 +54,6 @@ app.get('/health', (req, res) => {
 app.use('/api/products', productoRoutes);     //  GET/POST/PUT/DELETE /api/products
 app.use('/api/categories', categoriaRoutes);   //  GET /api/categories
 
-// conexión a mongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Conectado a MongoDB Atlas con éxito '))
-  .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
 // configuración de handlebars 
 app.engine('handlebars', engine({
