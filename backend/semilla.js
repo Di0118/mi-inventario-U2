@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const Producto= require('./models/Producto');
 const Categoria= require('./models/Categoria');
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/mi_inventario';
+require('dotenv').config();
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mi_inventario';
+
+console.log("INICIANDO SEMILLA...");
+console.log("URI:", MONGO_URI);
 
 const sembrarDatos = async () => {
     try {

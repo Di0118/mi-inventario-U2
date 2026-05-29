@@ -1,31 +1,36 @@
-require ('dotenv').config(); //lee el archivo .env
-// llamar a la libreria Express
+require('dotenv').config();
 const express = require('express');
 const app = express();
-// importar mongoose
 const mongoose = require('mongoose');
-// importar motor de plantillas
 const { engine } = require('express-handlebars');
 const path = require('path');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
+const http = require('http'); 
+const { Server } = require('socket.io');
 
 const Producto = require('./models/Producto');
 const Usuario = require('./models/Usuario');
 const Categoria = require('./models/Categoria');
-const { body, validationResult } = require('express-validator');
-const http = require('http'); 
-const { Server } = require('socket.io');
-const server = http.createServer(app); // servidor usando Express
-const io = new Server(server); // conectar Socket.io al servidor
-
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 
-const cors  = require('cors');
-const { timeStamp } = require('console');
+const server = http.createServer(app);
+const io = new Server(server, {
 
-app.use(cors()); 
+cors: {
+    origin: process.env.FRONTEND_URL, 
+    methods: ["GET", "POST"]
+  }
+});
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, 
+  optionsSuccessStatus: 200, // Algunos navegadores antiguos fallan con 204
+  credentials: true
+};
+app.use(cors(corsOptions));
+
 app.use(express.json()); // para que el servidor entienda JSON
 app.use(express.urlencoded({ extended: true })); // para entender datos de formularios
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // permite ver las fotos de la carpeta uploads
@@ -49,8 +54,7 @@ app.get('/health', (req, res) => {
     });
 });
 
-
-// ENRUTAMIENTO DE LA API REST ---
+// ENRUTAMIENTO 
 app.use('/api/products', productoRoutes);     //  GET/POST/PUT/DELETE /api/products
 app.use('/api/categories', categoriaRoutes);   //  GET /api/categories
 
@@ -183,16 +187,12 @@ app.get('/chat', asegurarAutenticacion, (req, res) => {
 
 // Lógica del Chat
 io.on('connection', (socket) => {
-    console.log('Alguien se conectó al chat');
     socket.on('enviar-mensaje', (datos) => {
         io.emit('mensaje-recibido', datos);
     });
 });
 
-
-// ENCENDER EL SERVIDOR
 const PORT = process.env.PORT || 3000;
-
 server.listen(PORT, () => {
-    console.log(`Servidor corriendo en ${PORT}`);
+    console.log(`Servidor corriendo en puerto ${PORT}`);
 });
