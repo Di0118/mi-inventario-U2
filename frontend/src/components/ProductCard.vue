@@ -15,17 +15,39 @@
    Editar
 </button>
 
+   <button @click="eliminarProducto(product._id)" class="btn-eliminar">
+  Eliminar
+</button>
+
+
+
   </div>
 </template>
 
 <script setup>
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+const eliminarProducto = async (id) => {
+  try {
+    await axios.delete(`${API_BASE_URL}/products/${id}`);
+    alert("Producto eliminado correctamente");
+
+    emit('producto-eliminado'); // avisar al padre
+
+  } catch (error) {
+    console.error(error);
+    alert("Error al eliminar producto");
+  }
+};
 
 const props = defineProps({
-  product: Object // Le decimos que recibirá un objeto (un amigurumi)
+  product: Object 
 });
 
 
-const emit = defineEmits(['added-to-cart']);
+const emit = defineEmits(['added-to-cart', 'producto-eliminado']);
 
 const avisarCarrito = () => {
  

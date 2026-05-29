@@ -3,7 +3,7 @@
     <h2> Nuestro Catálogo 🗒ˎˊ˗ </h2>
     <p> Aquí verás mis creaciones ¡Bienvenida al catálogo de crochet!</p>
 
-  <button @click="abrirCrearModal" class="btn-nuevo-producto">
+    <button @click="abrirCrearModal" class="btn-nuevo-producto">
       Agregar nuevo producto
     </button>
     
@@ -15,39 +15,35 @@
       />
 
       <select v-model="categoriaSeleccionada" class="selector-categoria">
-        <option value="">Todas las categorías </option>
-        <option 
-          v-for="cat in categories" 
-          :key="cat._id" 
-          :value="cat._id"
-        >
-          {{ cat.nombre }} </option>
+        <option value="">Todas las categorías</option>
+        <option v-for="cat in categories" :key="cat._id" :value="cat._id">
+          {{ cat.nombre }}
+        </option>
       </select>
     </div>
 
-<p v-if="loading" class="mensaje">Cargando tus amigurumis... </p>
-<p v-if="error" class="error">{{ error }}</p>
+    <p v-if="loading" class="mensaje">Cargando tus amigurumis...</p>
+    <p v-if="error" class="error">{{ error }}</p>
 
-<div v-if="!loading && !error" class="contenedor-productos">
-  <ProductCard
-    v-for="amigurumi in listaFiltrada"
-    :key="amigurumi._id" 
-    :product="amigurumi"
-    @added-to-cart="gestionarCarrito"
-    @editar-producto="abrirEditarModal" 
-  />
-</div>
+    <div v-if="!loading && !error" class="contenedor-productos">
+      <ProductCard
+        v-for="amigurumi in listaFiltrada"
+        :key="amigurumi._id" 
+        :product="amigurumi"
+        @added-to-cart="gestionarCarrito"
+        @editar-producto="abrirEditarModal" 
+        @producto-eliminado="recargarDatos"3
+      />
+    </div>
 
-<ProductModal 
-      :is-open="isModalOpen" 
-      :categories="categories"
-      :producto-datos="productoAEditar" 
-      @close="isModalOpen = false"
-      @producto-guardado="fetchAllProducts" 
-    />
-</div>
-</template>
-
+    <ProductModal 
+  :is-open="isModalOpen" 
+  :categories="categories"
+  :producto-datos="productoAEditar" 
+  @close="isModalOpen = false"
+  @producto-guardado="recargarDatos" 
+/>
+  </div> </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
@@ -62,43 +58,50 @@ const { agregarAlCarrito } = useCart();
 const busqueda = ref('');
 const categoriaSeleccionada = ref('');
 const isModalOpen = ref(false);
+const productoAEditar = ref(null);
 
-const productoAEditar = ref(null); 
+const recargarDatos = async () => {
+  await fetchAllProducts();
+  await fetchCategories();
+};
 
+const abrirCrearModal = async () => {
+  productoAEditar.value = null;
+
+  if (!categories.value || categories.value.length === 0) {
+    await fetchCategories();
+  }
+
+  isModalOpen.value = true;
+};
 const abrirEditarModal = (producto) => {
   productoAEditar.value = producto;
   isModalOpen.value = true;
 };
-const abrirCrearModal = () => {
-  productoAEditar.value = null; 
-  isModalOpen.value = true;
-};
-
 const gestionarCarrito = (producto) => {
   agregarAlCarrito(producto);
 };
 
-
 const listaFiltrada = computed(() => {
   if (!products.value) return [];
-
   return products.value.filter(amigurumi => {
     const coincideTexto = amigurumi.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
                           amigurumi.descripcion.toLowerCase().includes(busqueda.value.toLowerCase());
-
     const coincideCategoria = !categoriaSeleccionada.value || 
-      (amigurumi.categoriaId && amigurumi.categoriaId._id.toString() === categoriaSeleccionada.value.toString());
-
+      (amigurumi.categoriaId && amigurumi.categoriaId._id === categoriaSeleccionada.value);
     return coincideTexto && coincideCategoria;
   }); 
 });
 
 onMounted(async () => {
-  await fetchAllProducts();
   await fetchCategories();
+  await fetchAllProducts();
+  console.log("Categorías listas:", categories.value);
+console.log("Cantidad:", categories.value.length);
 });
 
 </script>
+
 
 <style scoped>
 

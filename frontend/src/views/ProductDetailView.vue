@@ -53,6 +53,15 @@ const cargarDatos = async () => {
 };
 
 onMounted(cargarDatos);
+const abrirCrearModal = async () => {
+  productoAEditar.value = null;
+
+  if (!categories.value || categories.value.length === 0) {
+    await fetchCategories();
+  }
+
+  isModalOpen.value = true;
+};
 </script>
 
 <style scoped>
