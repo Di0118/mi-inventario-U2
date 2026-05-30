@@ -17,21 +17,20 @@ const categoriaRoutes = require('./routes/categoriaRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 
 const server = http.createServer(app);
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://astounding-swan-4c6a0c.netlify.app'
+];
+
 const io = new Server(server, {
   cors: {
-    origin: [
-      'http://localhost:5173',
-      'https://calm-fudge-2f9999.netlify.app'
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"]
   }
 });
 
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://calm-fudge-2f9999.netlify.app'
-  ],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
