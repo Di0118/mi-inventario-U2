@@ -12,7 +12,7 @@ export function useProducts() {
    const categories = ref([]);
 
     const fetchAllProducts = async () => {
-        await apiProductos.request('/products');
+        await apiProductos.request('/api/products');
     };
 
     const fetchOneProduct = async (id) => {
@@ -21,7 +21,7 @@ export function useProducts() {
 
     const fetchCategories = async () => {
         try {
-            await apiCategorias.request('categories');
+            await apiCategorias.request('/api/categories');
              categories.value = apiCategorias.data.value || [];
 
         } catch (err) {
