@@ -18,18 +18,24 @@ const productoRoutes = require('./routes/productoRoutes');
 
 const server = http.createServer(app);
 const io = new Server(server, {
-
-cors: {
-    origin: process.env.FRONTEND_URL, 
+  cors: {
+    origin: [
+      'http://localhost:5173',
+      'https://calm-fudge-2f9999.netlify.app'
+    ],
     methods: ["GET", "POST"]
   }
 });
-const corsOptions = {
-  origin: process.env.FRONTEND_URL, 
-  optionsSuccessStatus: 200, // Algunos navegadores antiguos fallan con 204
+
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://calm-fudge-2f9999.netlify.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
-};
-app.use(cors(corsOptions));
+}));
+
 
 app.use(express.json()); // para que el servidor entienda JSON
 app.use(express.urlencoded({ extended: true })); // para entender datos de formularios
