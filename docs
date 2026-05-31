@@ -29,7 +29,7 @@
 <h1> MercApp - Micrositio</h1>
 
 <div class="box">
-  <h2>📌 Descripción</h2>
+  <h2>Descripción</h2>
   <p>
     MercApp es una aplicación web tipo SPA desarrollada con Vue 3 que consume una API REST creada con Node.js y Express.
   </p>
