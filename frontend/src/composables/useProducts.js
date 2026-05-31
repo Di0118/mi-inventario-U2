@@ -16,8 +16,8 @@ export function useProducts() {
     };
 
     const fetchOneProduct = async (id) => {
-        await apiProductos.request(`/products/${id}`);
-    };
+    await apiProductos.request(`/api/products/${id}`);
+};
 
     const fetchCategories = async () => {
         try {
