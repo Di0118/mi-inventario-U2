@@ -77,25 +77,25 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
 ## 📸 Evidencias
 
 **Página principal funcionando:**  
-<img src="https://github.com/user-attachments/assets/470e2f4d-b478-4280-a4b7-df766abb6fdb" width="600" />
+<img src="https://github.com/user-attachments/assets/470e2f4d-b478-4280-a4b7-df766abb6fdb" width="400" />
 
 **Modal para agregar y editar productos:**  
-<img src="https://github.com/user-attachments/assets/1e6638cf-96c2-437b-83c9-c734794ea7a8" width="600" />
+<img src="https://github.com/user-attachments/assets/1e6638cf-96c2-437b-83c9-c734794ea7a8" width="400" />
 
 **Buscador funcionando:**  
-<img src="https://github.com/user-attachments/assets/b5740ce8-3cf0-45f6-ad88-9ef9d8a9fe67" width="600" />
+<img src="https://github.com/user-attachments/assets/b5740ce8-3cf0-45f6-ad88-9ef9d8a9fe67" width="400" />
 
 **Categorías cargando:**  
-<img src="https://github.com/user-attachments/assets/3652c184-9219-4748-810d-375929961693" width="600" />
+<img src="https://github.com/user-attachments/assets/3652c184-9219-4748-810d-375929961693" width="400" />
 
 **Información del producto cargando:**  
-<img src="https://github.com/user-attachments/assets/109dbfab-c099-40d2-82fd-aa6399164194" width="600" />
+<img src="https://github.com/user-attachments/assets/109dbfab-c099-40d2-82fd-aa6399164194" width="400" />
 
 **Despliegue en Netlify:**  
-<img src="https://github.com/user-attachments/assets/d4b4871b-61c3-40f8-861d-1f5515814f7f" width="600" />
+<img src="https://github.com/user-attachments/assets/d4b4871b-61c3-40f8-861d-1f5515814f7f" width="400" />
 
 **Despliegue en Railway:**  
-<img src="https://github.com/user-attachments/assets/db11528d-3063-4214-9591-8c236cad71ca" width="600" />
+<img src="https://github.com/user-attachments/assets/db11528d-3063-4214-9591-8c236cad71ca" width="400" />
 ---
 
 
