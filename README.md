@@ -74,7 +74,7 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
    - La información se obtiene desde una **API desplegada en Railway** y almacenada en **MongoDB Atlas**.
 
 ---
-## 📸 Evidencias
+##  Evidencias
 
 **Página principal funcionando:**  
 <img src="https://github.com/user-attachments/assets/470e2f4d-b478-4280-a4b7-df766abb6fdb" width="400" />
