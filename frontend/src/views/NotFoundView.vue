@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-// vista simple, no necesita lógica
+
 </script>
