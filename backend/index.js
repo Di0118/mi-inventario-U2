@@ -172,7 +172,7 @@ app.get('/registrar-usuario-admin', async (req, res) => {
     }
 });
 
-app.get('/api/buscar-sugerencias', asegurarAutenticacion, async (req, res) => {
+('/api/buscar-sugerencias', asegurarAutenticacion, async (req, res) => {
     try {
         const { q } = req.query;
         const sugerencias = await Producto.find({ 
