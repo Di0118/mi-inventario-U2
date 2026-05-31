@@ -31,7 +31,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const eliminarProducto = async (id) => {
   try {
-    await axios.delete(`${API_BASE_URL}/products/${id}`);
+    await axios.delete(`${API_BASE_URL}/api/products/${id}`);
     alert("Producto eliminado correctamente");
 
     emit('producto-eliminado'); // avisar al padre

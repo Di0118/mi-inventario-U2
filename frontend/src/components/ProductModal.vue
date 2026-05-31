@@ -172,9 +172,9 @@ const guardarAmigurumi = async () => {
     };
 
     if (nuevoProd.value._id) {
-      await axios.put(`${API_BASE_URL}/products/${nuevoProd.value._id}`, data);
+      await axios.put(`${API_BASE_URL}/api/products/${nuevoProd.value._id}`, data);
     } else {
-      await axios.post(`${API_BASE_URL}/products`, data);
+     await axios.post(`${API_BASE_URL}/api/products`, data);
     }
 
     emit('producto-guardado');
