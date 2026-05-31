@@ -74,29 +74,29 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
    - La información se obtiene desde una **API desplegada en Railway** y almacenada en **MongoDB Atlas**.
 
 ---
-
-## Evidencias
+## 📸 Evidencias
 
 **Página principal funcionando:**  
-![Página principal funcionando](https://github.com/user-attachments/assets/470e2f4d-b478-4280-a4b7-df766abb6fdb)
+<img src="https://github.com/user-attachments/assets/470e2f4d-b478-4280-a4b7-df766abb6fdb" width="600" />
 
 **Modal para agregar y editar productos:**  
-![Modal para agregar y editar productos](https://github.com/user-attachments/assets/1e6638cf-96c2-437b-83c9-c734794ea7a8)
+<img src="https://github.com/user-attachments/assets/1e6638cf-96c2-437b-83c9-c734794ea7a8" width="600" />
 
 **Buscador funcionando:**  
-![Buscador funcionando](https://github.com/user-attachments/assets/b5740ce8-3cf0-45f6-ad88-9ef9d8a9fe67)
+<img src="https://github.com/user-attachments/assets/b5740ce8-3cf0-45f6-ad88-9ef9d8a9fe67" width="600" />
 
 **Categorías cargando:**  
-![Categorías cargando](https://github.com/user-attachments/assets/3652c184-9219-4748-810d-375929961693)
+<img src="https://github.com/user-attachments/assets/3652c184-9219-4748-810d-375929961693" width="600" />
 
 **Información del producto cargando:**  
-![Información del producto cargando](https://github.com/user-attachments/assets/109dbfab-c099-40d2-82fd-aa6399164194)
+<img src="https://github.com/user-attachments/assets/109dbfab-c099-40d2-82fd-aa6399164194" width="600" />
 
 **Despliegue en Netlify:**  
-![Despliegue en Netlify](https://github.com/user-attachments/assets/d4b4871b-61c3-40f8-861d-1f5515814f7f)
+<img src="https://github.com/user-attachments/assets/d4b4871b-61c3-40f8-861d-1f5515814f7f" width="600" />
 
 **Despliegue en Railway:**  
-![Despliegue en Railway](https://github.com/user-attachments/assets/db11528d-3063-4214-9591-8c236cad71ca)
+<img src="https://github.com/user-attachments/assets/db11528d-3063-4214-9591-8c236cad71ca" width="600" />
+---
 
 
 En este proyecto se logró implementar una aplicación web completa conectando un frontend con una API REST en producción. Se resolvieron problemas reales como configuración de variables de entorno, despliegue en la nube y errores de CORS, logrando que la aplicación funcione correctamente en internet.
