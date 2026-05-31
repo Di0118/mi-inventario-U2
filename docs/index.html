@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MercApp - Arquitectura</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 40px;
+      background: #f5f5f5;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    a {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+
+<h1> MercApp - Micrositio</h1>
+
+<div class="box">
+  <h2>Descripción</h2>
+  <p>
+    MercApp es una aplicación web tipo SPA desarrollada con Vue 3 que consume una API REST creada con Node.js y Express.
+  </p>
+</div>
+
+<div class="box">
+  <h2>Arquitectura</h2>
+  <ul>
+    <li>Frontend: Vue 3 (Netlify)</li>
+    <li>Backend: Node.js + Express (Railway)</li>
+    <li>Base de datos: MongoDB Atlas</li>
+  </ul>
+</div>
+
+<div class="box">
+  <h2> Enlaces</h2>
+  <p><b>Frontend:</b> <a href="https://astounding-swan-4c6a0c.netlify.app" target="_blank">Ver App</a></p>
+  <p><b>API:</b> <a href="https://mi-inventario-u2-production.up.railway.app/api" target="_blank">Ver API</a></p>
+</div>
+
+<div class="box">
+  <h2> Endpoints</h2>
+  <ul>
+    <li>GET /api/products → Obtener productos</li>
+    <li>GET /api/categories → Obtener categorías</li>
+    <li>POST /api/products → Crear producto</li>
+    <li>PUT /api/products/:id → Editar producto</li>
+    <li>DELETE /api/products/:id → Eliminar producto</li>
+  </ul>
+</div>
+
+</body>
+</html>
