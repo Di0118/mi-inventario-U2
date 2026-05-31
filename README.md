@@ -14,7 +14,7 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
 ---
 
 ## Enlaces del Proyecto
-* **Frontend (Netlify):** https://astounding-swan-4c6a0c.netlify.app  
+* **Frontend (Netlify):** https://fascinating-chebakia-9829b7.netlify.app  
 * **Backend API (Railway):** https://mi-inventario-u2-production.up.railway.app/api  
 
 ---
@@ -49,7 +49,7 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
 **Backend (`.env`)**
 - `MONGODB_URI=tu_conexion_mongodb`
 - `PORT=3000`
-- `FRONTEND_URL=https://astounding-swan-4c6a0c.netlify.app`
+- `FRONTEND_URL=https://fascinating-chebakia-9829b7.netlify.app`
 
 **Frontend (`.env.production`)**
 - `VITE_API_URL=https://mi-inventario-u2-production.up.railway.app/api`
@@ -59,7 +59,7 @@ La aplicación web consume de forma dinámica una **API REST** propia construida
 ## Instrucciones de Uso
 
 1. **Ingresar al sistema desde el navegador**  
-   - Frontend: [https://astounding-swan-4c6a0c.netlify.app](https://astounding-swan-4c6a0c.netlify.app)
+   - Frontend: [https://fascinating-chebakia-9829b7.netlify.app](https://fascinating-chebakia-9829b7.netlify.app)
 
 2. **Explorar el catálogo de productos**  
    - Ver productos disponibles  
@@ -108,7 +108,7 @@ En este proyecto se logró implementar una aplicación web completa conectando u
 **Backend (`.env`)**
 - `MONGODB_URI=tu_conexion_mongodb`
 - `PORT=3000`
-- `FRONTEND_URL=https://astounding-swan-4c6a0c.netlify.app`
+- `FRONTEND_URL=https://fascinating-chebakia-9829b7.netlify.app`
 
 **Frontend (`.env.production`)**
 - `VITE_API_URL=https://mi-inventario-u2-production.up.railway.app/api`
@@ -118,7 +118,7 @@ En este proyecto se logró implementar una aplicación web completa conectando u
 ## Instrucciones de Uso
 
 1. **Ingresar al sistema desde el navegador**  
-   - Frontend: [https://astounding-swan-4c6a0c.netlify.app](https://astounding-swan-4c6a0c.netlify.app)
+   - Frontend: [https://fascinating-chebakia-9829b7.netlify.app](https://fascinating-chebakia-9829b7.netlify.app)
 
 2. **Explorar el catálogo de productos**  
    - Ver productos disponibles  

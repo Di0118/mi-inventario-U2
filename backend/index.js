@@ -19,7 +19,7 @@ const productoRoutes = require('./routes/productoRoutes');
 const server = http.createServer(app);
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://astounding-swan-4c6a0c.netlify.app'
+  'https://fascinating-chebakia-9829b7.netlify.app'
 ];
 
 const io = new Server(server, {
