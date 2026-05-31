@@ -18,7 +18,7 @@ export function useApi(){
     : `${baseUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
 
        try {
-        console.log("URGENTE: La URL que estoy llamando es:", urlCompleta);
+        console.log("URGENTE: La URL que estoy llamando es:", urlCompleta);gi
             const response = await axios({
                 url: urlCompleta,
                 ...options
