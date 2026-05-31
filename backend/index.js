@@ -60,8 +60,8 @@ app.get('/health', (req, res) => {
 });
 
 // ENRUTAMIENTO 
-app.use('/api/products', productoRoutes);     //  GET/POST/PUT/DELETE /api/products
-app.use('/api/categories', categoriaRoutes);   //  GET /api/categories
+app.use('/products', productoRoutes);     //  GET/POST/PUT/DELETE /api/products
+app.use('/categories', categoriaRoutes);   //  GET /api/categories
 
 
 // configuración de handlebars 
